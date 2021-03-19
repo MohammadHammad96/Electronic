@@ -11,6 +11,7 @@ namespace Electronic.API.Persistence
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,6 +19,14 @@ namespace Electronic.API.Persistence
 
             modelBuilder.Entity<Category>()
                 .HasIndex(c => c.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<SubCategory>()
+                .HasIndex(s => new
+                {
+                    s.Name,
+                    s.CategoryId
+                })
                 .IsUnique();
         }
     }

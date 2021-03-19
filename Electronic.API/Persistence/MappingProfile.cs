@@ -9,10 +9,13 @@ namespace Electronic.API.Persistence
         public MappingProfile()
         {
             // Domain to Resource
-            CreateMap<Category, CategoryResource>();
+            CreateMap<Category, KeyValuePairResource>();
+            CreateMap<SubCategory, KeyValuePairResource>();
 
             // Resource to Domain
-            CreateMap<CategoryResource, Category>()
+            CreateMap<KeyValuePairResource, Category>()
+                .ForMember(c => c.Id, opt => opt.Ignore());
+            CreateMap<KeyValuePairResource, SubCategory>()
                 .ForMember(c => c.Id, opt => opt.Ignore());
         }
     }

@@ -3,14 +3,16 @@ using Electronic.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Electronic.API.Migrations
 {
     [DbContext(typeof(ElectronicDbContext))]
-    partial class ElectronicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210319194245_InsertBasicSubCategories")]
+    partial class InsertBasicSubCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

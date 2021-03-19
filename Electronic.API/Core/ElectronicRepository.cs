@@ -2,6 +2,7 @@
 using Electronic.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Electronic.API.Core
@@ -16,9 +17,12 @@ namespace Electronic.API.Core
             _context = context;
         }
 
-        public async Task<IEnumerable<Category>> GetCategories()
+        public async Task<IEnumerable<Category>> GetCategories(string name = null)
         {
-            return await _context.Categories.ToListAsync();
+            if (string.IsNullOrWhiteSpace(name))
+                return await _context.Categories.ToListAsync();
+
+            return await _context.Categories.Where(c => c.Name.Contains(name)).ToListAsync();
         }
 
         public async Task<Category> GetCategory(int id)
@@ -31,11 +35,43 @@ namespace Electronic.API.Core
             _context.Categories.Add(category);
         }
 
-        public async Task<bool> IsCategoryNameUnique(string categoryName)
+        public async Task<bool> IsCategoryNameUnique(string name)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == categoryName);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);
 
             if (category == null)
+                return true;
+
+            return false;
+        }
+
+        public async Task<IEnumerable<SubCategory>> GetSubCategories(int categoryId, string name = null)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return await _context.SubCategories.Where(s => s.CategoryId == categoryId).ToListAsync();
+
+            return await _context.SubCategories
+                .Where(s => s.Name.Contains(name) && s.CategoryId == categoryId)
+                .ToListAsync();
+        }
+
+        public async Task<SubCategory> GetSubCategory(int categoryId, int id)
+        {
+            return await _context.SubCategories
+                .SingleOrDefaultAsync(s => s.CategoryId == categoryId && s.Id == id);
+        }
+
+        public void AddSubCategory(Category category, SubCategory subCategory)
+        {
+            category.SubCategories.Add(subCategory);
+        }
+
+        public async Task<bool> IsSubCategoryNameUnique(int categoryId, string name)
+        {
+            var subCategory = await _context.SubCategories
+                    .SingleOrDefaultAsync(s => s.CategoryId == categoryId && s.Name == name);
+
+            if (subCategory == null)
                 return true;
 
             return false;

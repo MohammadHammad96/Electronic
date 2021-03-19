@@ -9,26 +9,20 @@ using System.Threading.Tasks;
 namespace Electronic.API.Controllers
 {
     [Route("/api/categories")]
-    public class CategoriesController : Controller
+    public class CategoriesController : BaseController
     {
-        private readonly IElectronicRepository _electronicRepository;
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-
         public CategoriesController(IElectronicRepository electronicRepository
             , IMapper mapper, IUnitOfWork unitOfWork)
+            : base(electronicRepository, mapper, unitOfWork)
         {
-            _electronicRepository = electronicRepository;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategories()
+        public async Task<IActionResult> GetCategories(string name = null)
         {
-            var categories = await _electronicRepository.GetCategories();
+            var categories = await _electronicRepository.GetCategories(name);
 
-            return Ok(_mapper.Map<IEnumerable<CategoryResource>>(categories));
+            return Ok(_mapper.Map<IEnumerable<KeyValuePairResource>>(categories));
         }
 
         [HttpGet("{id}")]
@@ -39,11 +33,11 @@ namespace Electronic.API.Controllers
             if (category == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<CategoryResource>(category));
+            return Ok(_mapper.Map<KeyValuePairResource>(category));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CategoryResource categoryResource)
+        public async Task<IActionResult> CreateCategory([FromBody] KeyValuePairResource categoryResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -58,7 +52,7 @@ namespace Electronic.API.Controllers
             _electronicRepository.AddCategory(category);
             await _unitOfWork.ConfirmChanges();
 
-            return Ok(_mapper.Map<CategoryResource>(category));
+            return Ok(_mapper.Map<KeyValuePairResource>(category));
         }
     }
 }

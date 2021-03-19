@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Electronic.API.Core.Models
 {
@@ -9,5 +11,12 @@ namespace Electronic.API.Core.Models
         [Required(AllowEmptyStrings = false)]
         [MaxLength(50)]
         public string Name { get; set; }
+
+        public ICollection<SubCategory> SubCategories { get; set; }
+
+        public Category()
+        {
+            SubCategories = new Collection<SubCategory>();
+        }
     }
 }
