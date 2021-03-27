@@ -5,5 +5,7 @@ namespace Electronic.API.Persistence
     public interface IUnitOfWork
     {
         Task ConfirmChanges();
+
+        void Dispose();
     }
 }

@@ -16,5 +16,10 @@ namespace Electronic.API.Core
         {
             await _context.SaveChangesAsync();
         }
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }

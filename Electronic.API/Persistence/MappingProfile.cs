@@ -16,7 +16,7 @@ namespace Electronic.API.Persistence
             CreateMap<KeyValuePairResource, Category>()
                 .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<KeyValuePairResource, SubCategory>()
-                .ForMember(c => c.Id, opt => opt.Ignore());
+                .ForMember(s => s.Id, opt => opt.Ignore());
         }
     }
 }

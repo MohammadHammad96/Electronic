@@ -16,5 +16,12 @@ namespace Electronic.API.Persistence
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            _unitOfWork.Dispose();
+
+            base.Dispose(disposing);
+        }
     }
 }
